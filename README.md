@@ -1,138 +1,56 @@
-# Tennis-radar-api
-Unlocking Tennis Data with SportRadar API
-Game Analytics: Unlocking Tennis Data with SportRadar API
-This project provides an interactive Streamlit dashboard to explore, analyze, and visualize tennis competition data collected from the SportRadar Tennis API. It supports real-time filtering, competitor search, rankings display, and country-level performance analysis.
+# 🎾 Game Analytics: Unlocking Tennis Data with SportRadar API
 
-🚀 Features
-🏠 Dashboard Overview: Summary metrics of total competitors, countries represented, and highest points scored.
+## 📌 Objective
+This project aims to build an interactive dashboard for analyzing tennis competition data using the SportRadar API. It enables users to explore competition hierarchies, player rankings, and venue data with real-time insights.
 
-📊 Competitor Search & Filters: Filter by rank range, country, or search by name.
+---
 
-🌍 Country Insights: Group competitors by country with average points and total participation.
+## 🛠️ Tech Stack
+- **Languages**: Python
+- **API**: [SportRadar Tennis API](https://developer.sportradar.com/tennis/reference/)
+- **Database**: MySQL / PostgreSQL
+- **App Framework**: Streamlit
 
-🏆 Leaderboards:
+---
 
-Top-ranked players
+## 📊 Features
+- **Event Exploration**: Browse through tournaments and categories.
+- **Player Leaderboards**: View top-ranked players in doubles.
+- **Venue & Complex Insights**: Analyze global venue distribution.
+- **Country-Wise Analysis**: Competitor stats by country.
+- **Search & Filter**: By rank, country, or points.
+- **Interactive UI**: Dynamic charts and tables.
 
-Players with the highest points
+---
 
-Competitors with stable rank movement (0)
+## 🔗 API Endpoints Used
+- `competitions`: To fetch category and competition details.
+- `complexes`: For venue and complex metadata.
+- `doubles-competitor-rankings`: For current player rankings.
 
-🗃️ Database Schema
-1. Categories Table
+---
 
-category_id (PK)
+## 🗃️ Database Schema
+- `Categories`
+- `Competitions`
+- `Complexes`
+- `Venues`
+- `Competitors`
+- `Competitor_Rankings`
 
-category_name
+> All tables are normalized with primary and foreign keys.
 
-2. Competitions Table
+---
 
-competition_id (PK)
+## 🧠 Sample SQL Queries
+```sql
+-- Top 5 ranked players
+SELECT name, rank, points FROM Competitor_Rankings 
+JOIN Competitors ON Competitor_Rankings.competitor_id = Competitors.competitor_id 
+ORDER BY rank ASC LIMIT 5;
 
-competition_name
-
-parent_id
-
-type
-
-gender
-
-category_id (FK)
-
-3. Complexes Table
-
-complex_id (PK)
-
-complex_name
-
-4. Venues Table
-
-venue_id (PK)
-
-venue_name
-
-city_name
-
-country_name
-
-country_code
-
-timezone
-
-complex_id (FK)
-
-5. Competitors Table
-
-competitor_id (PK)
-
-name
-
-country
-
-country_code
-
-abbreviation
-
-6. Competitor_Rankings Table
-
-rank_id (PK, AUTO_INCREMENT)
-
-rank
-
-movement
-
-points
-
-competitions_played
-
-competitor_id (FK)
-
-📦 Installation
-bash
-Copy
-Edit
-# Clone this repo
-git clone https://github.com/your-username/sport-radar-tennis-analytics.git
-cd sport-radar-tennis-analytics
-
-# Install dependencies
-pip install -r requirements.txt
-requirements.txt
-
-nginx
-Copy
-Edit
-streamlit
-mysql-connector-python
-pandas
-🔧 Configuration
-Edit the database credentials inside streamlit_app.py:
-
-python
-Copy
-Edit
-conn = mysql.connector.connect(
-    host="localhost",
-    user="your_user",
-    password="your_password",
-    database="tennis_db"
-)
-Make sure your MySQL database is running and the schema is loaded with the required tables and data.
-
-🏁 Running the App
-bash
-Copy
-Edit
-streamlit run streamlit_app.py
-Then visit: http://localhost:8501
-
-📊 Example SQL Queries Used
-Top 10 ranked competitors
-
-Competitor points grouped by country
-
-Competitions with no parent (top-level)
-
-Venues grouped by country and complex
-
-Competitors with stable ranking movement
+-- Competitions by Category
+SELECT category_name, COUNT(*) as total_competitions 
+FROM Competitions 
+JOIN Categories USING(category_id) 
+GROUP BY category_name;
